@@ -35,7 +35,7 @@ public final class NoFollowLinks implements Attributes {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinks that = (io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinks) o;
+        NoFollowLinks that = (NoFollowLinks) o;
 
         return path != null ? path.equals(that.path) : that.path == null;
 

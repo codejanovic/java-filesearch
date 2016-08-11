@@ -35,7 +35,7 @@ public final class FollowLinks implements Attributes {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        io.github.codejanovic.jfilesearch.filesystem.attributes.FollowLinks that = (io.github.codejanovic.jfilesearch.filesystem.attributes.FollowLinks) o;
+        FollowLinks that = (FollowLinks) o;
 
         return path != null ? path.equals(that.path) : that.path == null;
 

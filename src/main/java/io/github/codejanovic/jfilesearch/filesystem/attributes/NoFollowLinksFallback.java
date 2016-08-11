@@ -43,7 +43,7 @@ public final class NoFollowLinksFallback implements Attributes {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinksFallback that = (io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinksFallback) o;
+        NoFollowLinksFallback that = (NoFollowLinksFallback) o;
 
         if (attributes != null ? !attributes.equals(that.attributes) : that.attributes != null) return false;
         return noFollowAttributes != null ? noFollowAttributes.equals(that.noFollowAttributes) : that.noFollowAttributes == null;

@@ -40,7 +40,7 @@ public final class Cached implements Attributes {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        io.github.codejanovic.jfilesearch.filesystem.attributes.Cached cached = (io.github.codejanovic.jfilesearch.filesystem.attributes.Cached) o;
+        Cached cached = (Cached) o;
 
         return fallback != null ? fallback.equals(cached.fallback) : cached.fallback == null;
 
