@@ -2,6 +2,7 @@ package io.github.codejanovic.jfilesearch;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -18,6 +19,20 @@ public class JFileSearchPathStreamTest {
         thenFoundFilesAreSameAsFromDefaultJavaSearchExceptStartingDirectory();
     }
 
+    @Test
+    public void testJFileSearchStreamFindsAsMuchFilesAsDefaultJavaSearch() throws Exception {
+        givenSearchDirectory("src/test/resources/searchstructure");
+        whenSearchingWithJFileSearchFileStream();
+        thenFoundFilesAreSameAsFromDefaultJavaSearchExceptStartingDirectory();
+    }
+
+    private void whenSearchingWithJFileSearchFileStream() {
+        final Counter filesFound = new Counter();
+        new JFileSearch().searchDirectoryFileStream(givenSearchDirectory.toFile()).forEach(path -> filesFound.increment());
+        this.filesFound = filesFound.value();
+        System.out.println("pathstream: found files " + filesFound.value());
+    }
+
     private void thenFoundFilesAreSameAsFromDefaultJavaSearchExceptStartingDirectory() {
         assertThat(new JavaFileSearch().howMuchFilesAreFoundIgnoringExceptions(givenSearchDirectory)).isEqualTo(filesFound +1);
     }
@@ -26,6 +41,7 @@ public class JFileSearchPathStreamTest {
         final Counter filesFound = new Counter();
         new JFileSearch().searchDirectorySilentlyStream(givenSearchDirectory).forEach(path -> filesFound.increment());
         this.filesFound = filesFound.value();
+        System.out.println("filestream: found files " + filesFound.value());
     }
 
     private void givenSearchDirectory(final String path) {

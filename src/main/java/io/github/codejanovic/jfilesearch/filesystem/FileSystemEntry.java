@@ -4,6 +4,7 @@ import io.github.codejanovic.jfilesearch.filesystem.attributes.Cached;
 import io.github.codejanovic.jfilesearch.filesystem.attributes.FollowLinks;
 import io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinksFallback;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -24,8 +25,7 @@ public interface FileSystemEntry {
         }
 
         public Smart(final Path path) {
-            this.path = path;
-            this.attributes = new Cached(new NoFollowLinksFallback(new FollowLinks(path)));
+            this(path, new Cached(new NoFollowLinksFallback(new FollowLinks(path))));
         }
 
         @Override
