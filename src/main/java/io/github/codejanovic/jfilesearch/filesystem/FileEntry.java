@@ -4,18 +4,17 @@ import io.github.codejanovic.jfilesearch.filesystem.attributes.Cached;
 import io.github.codejanovic.jfilesearch.filesystem.attributes.FollowLinks;
 import io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinksFallback;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public interface FileSystemEntry {
+public interface FileEntry {
     Path path();
     Attributes attributes();
     boolean valid();
     boolean isFile();
     boolean isDirectory();
 
-    final class Smart implements FileSystemEntry{
+    final class Smart implements FileEntry {
         private final Path path;
         private final Attributes attributes;
 

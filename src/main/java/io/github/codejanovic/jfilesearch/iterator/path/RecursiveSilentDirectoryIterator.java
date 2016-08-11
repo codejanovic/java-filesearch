@@ -2,7 +2,7 @@ package io.github.codejanovic.jfilesearch.iterator.path;
 
 import io.github.codejanovic.jfilesearch.iterator.RepeatableIterator;
 import io.github.codejanovic.jfilesearch.filesystem.Directory;
-import io.github.codejanovic.jfilesearch.filesystem.FileSystemEntry;
+import io.github.codejanovic.jfilesearch.filesystem.FileEntry;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -10,14 +10,14 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Stack;
 
-public class SilentRecursivePathIterator implements Iterator<Path> {
+public class RecursiveSilentDirectoryIterator implements Iterator<Path> {
     private final Stack<RepeatableIterator<Path>> iteratorStack = new Stack<>();
     private RepeatableIterator<Path> iterator;
 
-    public SilentRecursivePathIterator(final FileSystemEntry start) {
+    public RecursiveSilentDirectoryIterator(final FileEntry start) {
         this.iterator = start.isDirectory()?
                 new RepeatableIterator.Closeable(
-                        new DirectoryPathIterator(
+                        new DirectoryIterator(
                                 new Directory.Smart(start))):
                 new RepeatableIterator.Smart(
                         new FilePathIterator(start));
@@ -63,14 +63,14 @@ public class SilentRecursivePathIterator implements Iterator<Path> {
     }
 
     private void whenCurrentPathIsADirectoryDoOpenIt() {
-        final FileSystemEntry current = new FileSystemEntry.Smart(iterator.current());
+        final FileEntry current = new FileEntry.Smart(iterator.current());
         if (!current.isDirectory())
             return;
         openDirectoryIfItIsNotEmpty(current);
     }
 
-    private void openDirectoryIfItIsNotEmpty(FileSystemEntry current) {
-        final RepeatableIterator<Path> currentDirectoryIterator = new RepeatableIterator.Closeable(new DirectoryPathIterator(new Directory.Smart(current)));
+    private void openDirectoryIfItIsNotEmpty(FileEntry current) {
+        final RepeatableIterator<Path> currentDirectoryIterator = new RepeatableIterator.Closeable(new DirectoryIterator(new Directory.Smart(current)));
         if (currentDirectoryIterator.hasNext()) {
             iteratorStack.push(iterator);
             iterator = currentDirectoryIterator;

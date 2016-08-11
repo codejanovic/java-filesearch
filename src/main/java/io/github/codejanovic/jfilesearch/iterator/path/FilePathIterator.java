@@ -1,6 +1,6 @@
 package io.github.codejanovic.jfilesearch.iterator.path;
 
-import io.github.codejanovic.jfilesearch.filesystem.FileSystemEntry;
+import io.github.codejanovic.jfilesearch.filesystem.FileEntry;
 
 import java.nio.file.Path;
 import java.util.Iterator;
@@ -9,8 +9,8 @@ import java.util.Stack;
 public class FilePathIterator implements Iterator<Path> {
     private final Stack<Path> stack = new Stack<>();
 
-    public FilePathIterator(final FileSystemEntry fileSystemEntry) {
-        stack.push(fileSystemEntry.path());
+    public FilePathIterator(final FileEntry fileEntry) {
+        stack.push(fileEntry.path());
     }
 
     @Override

@@ -10,12 +10,12 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Stack;
 
-public class DirectoryPathIterator implements CloseableIterator<Path> {
+public class DirectoryIterator implements CloseableIterator<Path> {
     private final Stack<DirectoryStream<Path>> stream = new Stack<>();
     private final Stack<Iterator<Path>> iterator = new Stack<>();
     private final Directory directory;
 
-    public DirectoryPathIterator(final Directory directory) {
+    public DirectoryIterator(final Directory directory) {
         this.directory = directory;
     }
 

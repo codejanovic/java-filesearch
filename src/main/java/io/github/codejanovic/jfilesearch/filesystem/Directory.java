@@ -4,28 +4,28 @@ import io.github.codejanovic.jfilesearch.filesystem.attributes.Cached;
 import io.github.codejanovic.jfilesearch.filesystem.attributes.FollowLinks;
 import io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinksFallback;
 import io.github.codejanovic.jfilesearch.iterator.CloseableIterator;
-import io.github.codejanovic.jfilesearch.iterator.path.DirectoryPathIterator;
+import io.github.codejanovic.jfilesearch.iterator.path.DirectoryIterator;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public interface Directory extends FileSystemEntry {
+public interface Directory extends FileEntry {
     CloseableIterator<Path> iterator();
     DirectoryStream<Path> open() throws IOException;
 
     final class Smart implements Directory {
-        private final FileSystemEntry fileSystemEntry;
+        private final FileEntry fileEntry;
         private final boolean test = false;
 
-        public Smart(final FileSystemEntry fileSystemEntry) {
-            this.fileSystemEntry = fileSystemEntry;
+        public Smart(final FileEntry fileEntry) {
+            this.fileEntry = fileEntry;
         }
 
         public Smart(final Path path) {
             this(
-                    new FileSystemEntry.Smart(path,
+                    new FileEntry.Smart(path,
                             new Cached(
                                     new NoFollowLinksFallback(
                                             new FollowLinks(path)))));
@@ -41,38 +41,38 @@ public interface Directory extends FileSystemEntry {
 
         @Override
         public Path path() {
-            return fileSystemEntry.path();
+            return fileEntry.path();
         }
 
         @Override
         public Attributes attributes() {
-            return fileSystemEntry.attributes();
+            return fileEntry.attributes();
         }
 
         @Override
         public boolean valid() {
-            return fileSystemEntry.valid();
+            return fileEntry.valid();
         }
 
         @Override
         public boolean isFile() {
-            return fileSystemEntry.isFile();
+            return fileEntry.isFile();
         }
 
         @Override
         public boolean isDirectory() {
-            return fileSystemEntry.isDirectory();
+            return fileEntry.isDirectory();
         }
 
 
         @Override
         public DirectoryStream<Path> open() throws IOException {
-            return Files.newDirectoryStream(fileSystemEntry.path());
+            return Files.newDirectoryStream(fileEntry.path());
         }
 
         @Override
         public CloseableIterator<Path> iterator() {
-            return new DirectoryPathIterator(this);
+            return new DirectoryIterator(this);
         }
 
         @Override

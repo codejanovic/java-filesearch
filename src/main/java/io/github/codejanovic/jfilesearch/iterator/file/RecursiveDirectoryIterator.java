@@ -2,9 +2,7 @@ package io.github.codejanovic.jfilesearch.iterator.file;
 
 import io.github.codejanovic.jfilesearch.iterator.RepeatableIterator;
 
-import java.io.Closeable;
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -40,13 +38,11 @@ public class RecursiveDirectoryIterator implements Iterator<File>{
     }
 
     private void thenDequeueThoseFilesUntilThereIsANextEntryOrNoFilesLeft() {
-        while (givenNoNextEntry()) {
-            closeDirectorySilently(iterator);
+        while (givenNoNextEntry())
             if (whenThereAreQueuedFiles())
                 iterator = iteratorStack.pop();
             else
                 return;
-        }
     }
 
     private boolean whenThereAreQueuedFiles() {
@@ -66,19 +62,10 @@ public class RecursiveDirectoryIterator implements Iterator<File>{
 
     private void openDirectoryIfItIsNotEmpty(File current) {
         final RepeatableIterator<File> currentDirectoryIterator = new RepeatableIterator.Smart<>(new DirectoryIterator(current));
-        if (currentDirectoryIterator.hasNext()) {
-            iteratorStack.push(iterator);
-            iterator = currentDirectoryIterator;
-        } else {
-            closeDirectorySilently(currentDirectoryIterator);
-        }
-    }
+        if (!currentDirectoryIterator.hasNext())
+            return;
 
-    private void closeDirectorySilently(final Iterator<File> iterator){
-        try {
-            if (iterator instanceof Closeable)
-                ((Closeable) iterator).close();
-        } catch (IOException e) {
-        }
+        iteratorStack.push(iterator);
+        iterator = currentDirectoryIterator;
     }
 }

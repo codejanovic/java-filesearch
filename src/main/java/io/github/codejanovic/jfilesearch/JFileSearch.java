@@ -1,26 +1,26 @@
 package io.github.codejanovic.jfilesearch;
 
-import io.github.codejanovic.jfilesearch.filesystem.FileSystemEntry;
-import io.github.codejanovic.jfilesearch.iterator.file.RecursiveDirectoryIterator;
-import io.github.codejanovic.jfilesearch.iterator.path.SilentRecursivePathIterator;
+import io.github.codejanovic.jfilesearch.providers.FileSearch;
+import io.github.codejanovic.jfilesearch.providers.PathSilentSearch;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-public class JFileSearch {
-    public Stream<Path> searchDirectorySilentlyStream(final Path path) {
-        final int characteristics = Spliterator.DISTINCT | Spliterator.SORTED | Spliterator.ORDERED;
-        final Spliterator<Path> spliterator = Spliterators.spliteratorUnknownSize(new SilentRecursivePathIterator(new FileSystemEntry.Smart(path)), characteristics);
-        return StreamSupport.stream(spliterator, false);
-    }
+public interface JFileSearch {
+    SearchProvider silentPathStream(final Path path);
+    SearchProvider fileStream(final File file);
 
-    public Stream<File> searchDirectoryFileStream(final File file) {
-        final int characteristics = Spliterator.DISTINCT | Spliterator.SORTED | Spliterator.ORDERED;
-        final Spliterator<File> spliterator = Spliterators.spliteratorUnknownSize(new RecursiveDirectoryIterator(file), characteristics);
-        return StreamSupport.stream(spliterator, false);
+    class Default implements JFileSearch {
+
+        @Override
+        public SearchProvider silentPathStream(Path path) {
+            return new PathSilentSearch(path);
+        }
+
+        @Override
+        public SearchProvider fileStream(File file) {
+            return new FileSearch(file);
+        }
     }
 }
