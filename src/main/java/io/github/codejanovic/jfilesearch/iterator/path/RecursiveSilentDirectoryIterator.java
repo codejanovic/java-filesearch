@@ -26,13 +26,31 @@ public class RecursiveSilentDirectoryIterator implements Iterator<Path> {
     @Override
     public boolean hasNext() {
         if (givenCurrentPath())
-            whenCurrentPathIsADirectoryDoOpenIt();
+            if (loopIsDetected())
+                skipDirectory();
+            else
+                openDirectory();
 
         if (givenNoNextEntry())
             if (whenThereAreQueuedPaths())
                 thenDequeueThosePathsUntilThereIsANextEntryOrNoPathsLeft();
 
         return iterator.hasNext();
+    }
+
+    private void skipDirectory() {
+    }
+
+    private boolean loopIsDetected() {
+        final FileEntry current = new FileEntry.Smart(iterator.current());
+        if (!current.isDirectory())
+            return false;
+
+        for (RepeatableIterator<Path> ancestor: iteratorStack)
+            if (new FileEntry.Smart(ancestor.current()).equals(current))
+                return true;
+
+        return false;
     }
 
     @Override
@@ -62,7 +80,7 @@ public class RecursiveSilentDirectoryIterator implements Iterator<Path> {
         return !iterator.hasNext();
     }
 
-    private void whenCurrentPathIsADirectoryDoOpenIt() {
+    private void openDirectory() {
         final FileEntry current = new FileEntry.Smart(iterator.current());
         if (!current.isDirectory())
             return;

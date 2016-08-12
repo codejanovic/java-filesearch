@@ -5,11 +5,13 @@ import io.github.codejanovic.jfilesearch.filesystem.attributes.FollowLinks;
 import io.github.codejanovic.jfilesearch.filesystem.attributes.NoFollowLinksFallback;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public interface FileEntry {
     Path path();
     Attributes attributes();
+    Object uniqueKey();
     boolean valid();
     boolean isFile();
     boolean isDirectory();
@@ -35,6 +37,23 @@ public interface FileEntry {
         @Override
         public Attributes attributes() {
             return attributes;
+        }
+
+        @Override
+        public Object uniqueKey() {
+            try {
+                return attributes().load().fileKey();
+            } catch (IOException e) {
+                return null;
+            }
+        }
+
+        private boolean isSame(FileEntry file) {
+            try {
+                return Files.isSameFile(path(), file.path());
+            } catch (IOException e) {
+                return false;
+            }
         }
 
         @Override
@@ -70,15 +89,17 @@ public interface FileEntry {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            Smart aSmart = (Smart) o;
+            FileEntry aSmart = (FileEntry) o;
 
-            return path != null ? path.equals(aSmart.path) : aSmart.path == null;
-
+            if ((uniqueKey() == null) || (aSmart.uniqueKey() == null))
+                return isSame(aSmart);
+            else
+                return uniqueKey() != null ? uniqueKey().equals(aSmart.uniqueKey()) : false;
         }
 
         @Override
         public int hashCode() {
-            return path != null ? path.hashCode() : 0;
+            return uniqueKey() != null ? uniqueKey().hashCode() : path.hashCode();
         }
     }
 }

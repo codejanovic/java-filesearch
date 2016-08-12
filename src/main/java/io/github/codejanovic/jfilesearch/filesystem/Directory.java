@@ -17,7 +17,6 @@ public interface Directory extends FileEntry {
 
     final class Smart implements Directory {
         private final FileEntry fileEntry;
-        private final boolean test = false;
 
         public Smart(final FileEntry fileEntry) {
             this.fileEntry = fileEntry;
@@ -31,14 +30,6 @@ public interface Directory extends FileEntry {
                                             new FollowLinks(path)))));
         }
 
-        private Object uuid() {
-            try {
-                return attributes().load().fileKey();
-            } catch (IOException e) {
-                return null;
-            }
-        }
-
         @Override
         public Path path() {
             return fileEntry.path();
@@ -47,6 +38,11 @@ public interface Directory extends FileEntry {
         @Override
         public Attributes attributes() {
             return fileEntry.attributes();
+        }
+
+        @Override
+        public Object uniqueKey() {
+            return fileEntry.uniqueKey();
         }
 
         @Override
@@ -77,19 +73,12 @@ public interface Directory extends FileEntry {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Directory.Smart aSmart = (Directory.Smart) o;
-
-            return uuid() != null ? uuid().equals(aSmart.uuid()) : false;
+           return fileEntry.equals(o);
         }
 
         @Override
         public int hashCode() {
-            int result = uuid() != null ? uuid().hashCode() : 0;
-            result = 31 * result + (test ? 1 : 0);
-            return result;
+            return fileEntry.hashCode();
         }
     }
 }
