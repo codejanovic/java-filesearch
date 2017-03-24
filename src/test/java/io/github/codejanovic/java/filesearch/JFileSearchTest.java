@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static io.github.codejanovic.java.filesearch.Search.search;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JFileSearchTest {
@@ -41,7 +42,7 @@ public class JFileSearchTest {
 
     private void whenSearchingWithFileStream() {
         final Counter filesFound = new Counter();
-        new JFileSearch.Default().fileStream(givenSearchDirectory.toFile()).stream().forEach(path -> filesFound.increment());
+        search().directory(givenSearchDirectory).recursively().byFile().stream().forEach(path -> filesFound.increment());
         this.filesFound = filesFound.value();
     }
 
@@ -55,7 +56,7 @@ public class JFileSearchTest {
 
     private void whenSearchingWithPathSilentStream() {
         final Counter filesFound = new Counter();
-        new JFileSearch.Default().silentPathStream(givenSearchDirectory).stream().forEach(path -> filesFound.increment());
+        search().directory(givenSearchDirectory).recursively().byPath().stream().forEach(path -> filesFound.increment());
         this.filesFound = filesFound.value();
     }
 
