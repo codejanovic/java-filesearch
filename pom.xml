@@ -4,7 +4,7 @@
 
     <groupId>io.github.codejanovic</groupId>
     <artifactId>java-filesearch</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>java-filesearch</name>
@@ -34,7 +34,7 @@
         <connection>scm:git:git://github.com/codejanovic/java-filesearch.git</connection>
         <developerConnection>scm:git:git@github.com:codejanovic/java-filesearch.git</developerConnection>
         <url>https://github.com/codejanovic/java-filesearch.git</url>
-        <tag>0.1.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
