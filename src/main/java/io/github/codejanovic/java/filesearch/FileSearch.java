@@ -69,7 +69,7 @@ public interface FileSearch<T> {
         }
 
         @Override
-        public Iterator iterator() {
+        public Iterator<File> iterator() {
             return new io.github.codejanovic.java.filesearch.iterator.file.DirectoryIterator(directory);
         }
     }
@@ -86,7 +86,7 @@ public interface FileSearch<T> {
         }
 
         @Override
-        public Iterator iterator() {
+        public Iterator<File> iterator() {
             return new RecursiveDirectoryIterator(directory);
         }
     }
